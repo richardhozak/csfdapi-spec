@@ -1,5 +1,5 @@
 # csfd OpenAPI Specification
-[![Build Status](https://travis-ci.org/zxey/csfdapi-spec.svg?branch=master)](https://travis-ci.org/zxey/csfdapi-spec)
+[![Build Status](https://travis-ci.com/zxey/csfdapi-spec.svg?branch=master)](https://travis-ci.com/zxey/csfdapi-spec)
 
 ## Steps to finish
 
