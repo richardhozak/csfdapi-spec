@@ -91,18 +91,18 @@ securityDefinitions:
     description: |
       ```
       request token url:      https://android-api.csfd.cz/oauth/request-token
-      access token url:       https://android-api.csfd.cz/oauth/access-token  
-      user authorization url: https://android-api.csfd.cz/oauth/authorize  
-      callback url:           csfdroid://oauth-callback  
-      signature method:       HMAC-SHA1  
-      consumer key:           061025241049  
+      access token url:       https://android-api.csfd.cz/oauth/access-token
+      user authorization url: https://android-api.csfd.cz/oauth/authorize
+      callback url:           csfdroid://oauth-callback
+      signature method:       HMAC-SHA1
+      consumer key:           061025241049
       consumer secret:        -
       ```
-      Unfortunately I do not provide consumer secret at this time as it would probably be violation of POMO Media Group s.r.o. copyright, because the only way to obtain consumer secret is by decompiling csfd source files.  
+      Unfortunately I do not provide consumer secret at this time as it would probably be violation of POMO Media Group s.r.o. copyright, because the only way to obtain consumer secret is by decompiling csfd source files.
       Consumer key is publicly known by observing android csfd app request with http proxy.
 
 # Holds the relative paths to the individual endpoints. The path is appended to the
-# basePath in order to construct the full URL. 
+# basePath in order to construct the full URL.
 paths:
   '/users/{username}': # path parameter in curly braces
     # documentation for GET operation for this path
