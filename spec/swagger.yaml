@@ -15,11 +15,11 @@ info:
     This is unofficial CSFD api specification written as an OpenAPI specification.
     # Introduction
     This specification uses mobile android api as a reference and tries to document all possible endpoints and their parameters.
-    
+
     # OpenAPI Specification
     The goal of The OpenAPI Specification is to define a standard, language-agnostic interface to REST APIs which
     allows both humans and computers to discover and understand the capabilities of the service without access to source
-    code, documentation, or through network traffic inspection. When properly defined via OpenAPI, a consumer can 
+    code, documentation, or through network traffic inspection. When properly defined via OpenAPI, a consumer can
     understand and interact with the remote service with a minimal amount of implementation logic. Similar to what
     interfaces have done for lower-level programming, OpenAPI removes the guesswork in calling the service.
 
@@ -56,10 +56,34 @@ consumes:
 # A list of tags used by the specification with additional metadata.
 # The order of the tags can be used to reflect on their order by the parsing tools.
 tags:
-  - name: Echo
-    description: Example echo operations
+  - name: Home
+    description: Homepage data
+  - name: Search
+    description: Searching
+  - name: Creator
+    description: Operations to query creator info
+  - name: Film
+    description: Operations to query film info
+  - name: Cinema
+    description: Operations about cinema, programmes, nearest, etc
+  - name: Charts
+    description: ""
   - name: User
     description: Operations about user
+  - name: Favorites
+    description: Query favorites for user or global fanclubs
+  - name: Watchlist
+    description: Operations about watchlist
+  - name: Tv
+    description: Operations to query tv programme
+  - name: Ad
+    description: Operations about ads
+  - name: Messages
+    description: Operations about messages
+  - name: Video
+    description: Operations about videos
+  - name: Release
+    description: Operations about releases
 # Security scheme definitions that can be used across the specification.
 securityDefinitions:
   oauth1: # security definition name (you can name it as you want)
@@ -93,18 +117,18 @@ paths:
     get:
       tags:
         - User
-      
+
       # summary is up to 120 symbold but we recommend to be shortest as possible
       summary: Get user by user name
-      
+
       # you can use GFM in operation description too: https://guides.github.com/features/mastering-markdown
-      description: | 
-        Some description of the operation. 
+      description: |
+        Some description of the operation.
         You can use `markdown` here.
-      
+
       # operationId should be unique across the whole specification
       operationId: getUserByName
-      
+
       # list of parameters for the operation
       parameters:
         - name: username
@@ -116,7 +140,7 @@ paths:
           in: query
           description: Filter users without email
           type: boolean
-      
+
       # security schemas applied to this operation
       security:
         - oauth1: []
@@ -168,7 +192,7 @@ paths:
           description: Invalid user supplied
         '404':
           description: User not found
-  
+
   '/echo':
     post:
       tags:
