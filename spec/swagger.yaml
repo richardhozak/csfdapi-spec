@@ -104,9 +104,158 @@ securityDefinitions:
 # Holds the relative paths to the individual endpoints. The path is appended to the
 # basePath in order to construct the full URL.
 paths:
+  '/identity':
+    get:
+      tags:
+        - User
+      summary: Get user identity
+      description: |
+        Get info about logged in user (its identity).
+      operationId: getIdentity
+      parameters: []
+      security:
+        - oauth1: []
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Success
+
+  '/home':
+    get:
+      tags:
+       - Home
+      summary: Get home
+      description: |
+        Get home introduction screen data
+      operationId: getHome
+      parameters:
+        - name: data
+          in: query
+          description: 'Specifies which type content to include in response'
+          required: false
+          type: string
+        - name: creator_profile_visits_limit
+          in: query
+          description: 'Specifies the limit of entries in creator profile visits array in response if creator_profile_visits is included in data parameter'
+          required: false
+          type: integer
+        - name: limit
+          in: query
+          description: Specifies the limit of all entries requested in data parameter. Limit is not applied to 'new_videos' and 'creator_profile_visits' entries in 'data' parameter
+          required: false
+          type: integer
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Success
+
+  '/search':
+    get:
+      tags:
+        - Search
+      summary: Search for query
+      description: |
+        Searches given query for films, creators, and users at once.
+      operationId: getSearch
+      parameters:
+        - name: q
+          in: query
+          type: string
+          required: true
+          description: The query to search for
+        - name: limit
+          in: query
+          type: integer
+          required: false
+          description: Limit of search entries in response
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Success
+
+  '/creator/{creator_id}':
+    get:
+      tags:
+        - Creator
+      summary: Get info about creator
+      description: |
+        Lists info and summary about creator (can be actor, director, screenwriter, etc.) with specified id.
+        Id of creator can be retrieved using search or it can be contained in other responses.
+      operationId: getCreator
+      parameters:
+        - name: creator_id
+          in: path
+          description: 'The id of a creator'
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: Success
+
+  '/creator/{creator_id}/films':
+    get:
+      tags:
+        - Creator
+      summary: Gets creator's films
+      description: |
+        Lists info about creator's films in which they are involved in or they created.
+        For actors these movies are the ones they starred in, for director the ones they directed, etc.
+      operationId: getCreatorFilms
+      parameters:
+        - name: creator_id
+          in: path
+          description: 'The id of a creator'
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: Success
+
+  '/creator/{creator_id}/videos':
+    get:
+      tags:
+        - Creator
+      summary: Gets creator's videos
+      description: |
+        Lists creator's videos in which they are portraied in or they were involved in this film's production.
+        For actors these movies are the ones they starred in, for director the ones they directed, etc.
+      operationId: getCreatorVideos
+      parameters:
+        - name: creator_id
+          in: path
+          description: 'The id of a creator'
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: Success
+
+  '/creator/{creator_id}/photos':
+    get:
+      tags:
+        - Creator
+      summary: Gets creator's photos
+      description: |
+        Lists creator's photos in which they are portraied in or they were involved in this film's production.
+        This photos can be pictures of actors in movies, pictures of directors from sets.
+        For actors these movies are the ones they starred in, for director the ones they directed, etc.
+      operationId: getCreatorPhotos
+      parameters:
+        - name: creator_id
+          in: path
+          description: 'The id of a creator'
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: Success
+
   '/users/{username}': # path parameter in curly braces
     # documentation for GET operation for this path
-    
+
     # parameters list that are used with each operation for this path
     parameters:
       - name: pretty_print
