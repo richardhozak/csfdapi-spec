@@ -1,4 +1,7 @@
-# csfd OpenAPI Specification
+# Csfd OpenAPI Specification
+
+Work In Proggress implementation of this api in Rust: [here](https://github.com/zxey/csfdapi)
+
 [![Build Status](https://travis-ci.com/zxey/csfdapi-spec.svg?branch=master)](https://travis-ci.com/zxey/csfdapi-spec)
 
 ## Links
