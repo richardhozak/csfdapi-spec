@@ -1,0 +1,815 @@
+{
+  "swagger": "2.0",
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "host": "android-api.csfd.cz",
+  "info": {
+    "description": "This is unofficial CSFD api specification written as an OpenAPI specification.\n# Introduction\nThis specification uses mobile android api as a reference and tries to document all possible endpoints and their parameters.\n\n# OpenAPI Specification\nThe goal of The OpenAPI Specification is to define a standard, language-agnostic interface to REST APIs which\nallows both humans and computers to discover and understand the capabilities of the service without access to source\ncode, documentation, or through network traffic inspection. When properly defined via OpenAPI, a consumer can\nunderstand and interact with the remote service with a minimal amount of implementation logic. Similar to what\ninterfaces have done for lower-level programming, OpenAPI removes the guesswork in calling the service.\n",
+    "version": "1.0.0",
+    "title": "csfdapi specification",
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "x-logo": {
+      "url": "https://apis.guru/openapi-template/logo.png"
+    }
+  },
+  "externalDocs": {
+    "description": "You can check out reference client api implementation as a rust library here.",
+    "url": "https://github.com/zxey/csfdapi"
+  },
+  "produces": [
+    "application/json",
+    "application/xml",
+    "text/csv"
+  ],
+  "consumes": [
+    "application/json",
+    "application/xml"
+  ],
+  "tags": [
+    {
+      "name": "Home",
+      "description": "Homepage data"
+    },
+    {
+      "name": "Search",
+      "description": "Searching"
+    },
+    {
+      "name": "Creator",
+      "description": "Operations to query creator info"
+    },
+    {
+      "name": "Film",
+      "description": "Operations to query film info"
+    },
+    {
+      "name": "Cinema",
+      "description": "Operations about cinema, programmes, nearest, etc"
+    },
+    {
+      "name": "Charts",
+      "description": ""
+    },
+    {
+      "name": "User",
+      "description": "Operations about user"
+    },
+    {
+      "name": "Favorites",
+      "description": "Query favorites for user or global fanclubs"
+    },
+    {
+      "name": "Watchlist",
+      "description": "Operations about watchlist"
+    },
+    {
+      "name": "Tv",
+      "description": "Operations to query tv programme"
+    },
+    {
+      "name": "Ad",
+      "description": "Operations about ads"
+    },
+    {
+      "name": "Messages",
+      "description": "Operations about messages"
+    },
+    {
+      "name": "Video",
+      "description": "Operations about videos"
+    },
+    {
+      "name": "Release",
+      "description": "Operations about releases"
+    }
+  ],
+  "securityDefinitions": {
+    "oauth1": {
+      "type": "basic",
+      "description": "```\nENDPOINTS\nrequest token url:      https://android-api.csfd.cz/oauth/request-token\naccess token url:       https://android-api.csfd.cz/oauth/access-token\nuser authorization url: https://android-api.csfd.cz/oauth/authorize\ncallback url:           csfdroid://oauth-callback\nsignature method:       HMAC-SHA1\nconsumer key:           061025241049\nconsumer secret:        -\n```\nUnfortunately I do not provide consumer secret at this time as it would probably be violation of POMO Media Group s.r.o. copyright, because the only way to obtain consumer secret is by decompiling csfd source files.\nConsumer key is publicly known by observing android csfd app request with http proxy.\n"
+    }
+  },
+  "paths": {
+    "/identity": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Get user identity",
+        "description": "Get info about logged in user (its identity).\n",
+        "operationId": "getIdentity",
+        "parameters": [],
+        "security": [
+          {
+            "oauth1": []
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/home": {
+      "get": {
+        "tags": [
+          "Home"
+        ],
+        "summary": "Get home",
+        "description": "Get home introduction screen data\n",
+        "operationId": "getHome",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "query",
+            "description": "Specifies which type content to include in response",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "creator_profile_visits_limit",
+            "in": "query",
+            "description": "Specifies the limit of entries in creator profile visits array in response if creator_profile_visits is included in data parameter",
+            "required": false,
+            "type": "integer"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Specifies the limit of all entries requested in data parameter. Limit is not applied to 'new_videos' and 'creator_profile_visits' entries in 'data' parameter",
+            "required": false,
+            "type": "integer"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/search": {
+      "get": {
+        "tags": [
+          "Search"
+        ],
+        "summary": "Search for query",
+        "description": "Searches given query for films, creators, and users at once.\n",
+        "operationId": "getSearch",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "type": "string",
+            "required": true,
+            "description": "The query to search for"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer",
+            "required": false,
+            "description": "Limit of search entries in response"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/search/users": {
+      "get": {
+        "tags": [
+          "Search"
+        ],
+        "summary": "Search for query",
+        "description": "Searches given query for users only.\n",
+        "operationId": "getSearchUsers",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "type": "string",
+            "required": true,
+            "description": "The user to search for"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer",
+            "required": false,
+            "description": "Limit of search entries in response"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/creator/{creator_id}": {
+      "get": {
+        "tags": [
+          "Creator"
+        ],
+        "summary": "Get info about creator",
+        "description": "Lists info and summary about creator (can be actor, director, screenwriter, etc.) with specified id.\nId of creator can be retrieved using search or it can be contained in other responses.\n",
+        "operationId": "getCreator",
+        "parameters": [
+          {
+            "name": "creator_id",
+            "in": "path",
+            "description": "The id of a creator",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/creator/{creator_id}/films": {
+      "get": {
+        "tags": [
+          "Creator"
+        ],
+        "summary": "Gets creator's films",
+        "description": "Lists info about creator's films in which they are involved in or they created.\nFor actors these movies are the ones they starred in, for director the ones they directed, etc.\n\n**NOTES**  \nDoes this api have _offset_ and _limit_ like the other creator endpoints?\nThere also seems to be parameter _return_ to specify what obejct to return, so far\nonly 'return=array' is used in mobile api, is this parameter optional? (seems to be)\n",
+        "operationId": "getCreatorFilms",
+        "parameters": [
+          {
+            "name": "creator_id",
+            "in": "path",
+            "description": "The id of a creator",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/creator/{creator_id}/videos": {
+      "get": {
+        "tags": [
+          "Creator"
+        ],
+        "summary": "Gets creator's videos",
+        "description": "Lists creator's videos in which they are portraied in or they were involved in this film's production.\nFor actors these movies are the ones they starred in, for director the ones they directed, etc.\n",
+        "operationId": "getCreatorVideos",
+        "parameters": [
+          {
+            "name": "creator_id",
+            "in": "path",
+            "description": "The id of a creator",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "**TODO**",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "**TODO**",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/creator/{creator_id}/photos": {
+      "get": {
+        "tags": [
+          "Creator"
+        ],
+        "summary": "Gets creator's photos",
+        "description": "Lists creator's photos in which they are portraied in or they were involved in this film's production.\nThis photos can be pictures of actors in movies, pictures of directors from sets.\nFor actors these movies are the ones they starred in, for director the ones they directed, etc.\n",
+        "operationId": "getCreatorPhotos",
+        "parameters": [
+          {
+            "name": "creator_id",
+            "in": "path",
+            "description": "The id of a creator",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "**TODO**",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "**TODO**",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/film/{film_id}": {
+      "get": {
+        "tags": [
+          "Film"
+        ],
+        "summary": "Get film",
+        "description": "Gets partial info about movie under specific movie id, which can later be filled\nby other endpoints in Film category.\n\nDetails need to be confirmed  \n**NOTES**  \nSome film endpoints take _width_ as a parameter this probably corresponds to sizing of videos\nor photos which have links to images with correct sizes or urls with correctly specified query\nparameter of this size.\n",
+        "operationId": "getFilm",
+        "parameters": [
+          {
+            "name": "film_id",
+            "in": "path",
+            "description": "film id",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/film/{film_id}/photos": {
+      "get": {
+        "tags": [
+          "Film"
+        ],
+        "summary": "Get film photos",
+        "description": "Gets all photos related to film under specific movie id, this can be filled\ninto json structure previously received with getFilm\n\nDetails need to be confirmed  \n**NOTES**  \nThere also is parameter _size_ which seems to always be 'all', can it be anything else?\nhow is it relevant to api usage? do we need to expose it? can we use it in other film endpoints?\n",
+        "operationId": "getFilmPhotos",
+        "parameters": [
+          {
+            "name": "film_id",
+            "in": "path",
+            "description": "film id",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "offset",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "limit",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "width",
+            "in": "query",
+            "description": "width",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "This always seem to be \"all\", can it be anything else?",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/film/{film_id}/videos": {
+      "get": {
+        "tags": [
+          "Film"
+        ],
+        "summary": "Get film videos",
+        "description": "Gets all videos related to film under specific movie id, this can be filled\ninto json structure previous received with getFilm\n\nDetails need to be confirmed  \n**NOTES**\nCan we also use _size_ parameter here as it is with getFilmPhotos?\n",
+        "operationId": "getFilmVideos",
+        "parameters": [
+          {
+            "name": "film_id",
+            "in": "path",
+            "description": "film id",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "offset",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "limit",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "width",
+            "in": "query",
+            "description": "width",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/film/{film_id}/comments": {
+      "get": {
+        "tags": [
+          "Film"
+        ],
+        "summary": "Get film comments",
+        "description": "Returns all comments for this movie from users which commented.\n\nDetails need to be confirmed\n",
+        "operationId": "getFilmComments",
+        "parameters": [
+          {
+            "name": "film_id",
+            "in": "path",
+            "description": "film id",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "offset",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "limit",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/film/{film_id}/trivia": {
+      "get": {
+        "tags": [
+          "Film"
+        ],
+        "summary": "Get film trivia",
+        "description": "Returns all trivia associated with this movie.\n\nDetails need to be confirmed  \n",
+        "operationId": "getFilmTrivia",
+        "parameters": [
+          {
+            "name": "film_id",
+            "in": "path",
+            "description": "film id",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "offset",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "limit",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/film/{film_id}/creators": {
+      "get": {
+        "tags": [
+          "Film"
+        ],
+        "summary": "Get film creators",
+        "description": "Returns list of creators associated with this movies such as directors, actors, screenwriters, ...\n\nDetails need to be confirmed\n",
+        "operationId": "getFilmCreators",
+        "parameters": [
+          {
+            "name": "film_id",
+            "in": "path",
+            "description": "film id",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/film/{film_id}/my-rating": {
+      "get": {
+        "tags": [
+          "Film"
+        ],
+        "summary": "Get users film rating",
+        "description": "Returns rating of this movie of logged in user\n\nDetails need to be confirmed\n**NOTES**  \nThis endpoint surely needs user to be logged in and authorized (TODO confirm)\n",
+        "operationId": "getMyFilmRating",
+        "parameters": [
+          {
+            "name": "film_id",
+            "in": "path",
+            "description": "film id",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/film/{film_id}/my-comment": {
+      "get": {
+        "tags": [
+          "Film"
+        ],
+        "summary": "Get users film comment",
+        "description": "Returns comment of this movie of logged in user\n\nDetails need to be confirmed\n**NOTES**  \nThis endpoint surely needs user to be logged in and authorized (TODO confirm)\n",
+        "operationId": "getMyFilmComment",
+        "parameters": [
+          {
+            "name": "film_id",
+            "in": "path",
+            "description": "film id",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/users/{username}": {
+      "parameters": [
+        {
+          "name": "pretty_print",
+          "in": "query",
+          "description": "Pretty print response",
+          "type": "boolean"
+        }
+      ],
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Get user by user name",
+        "description": "Some description of the operation.\nYou can use `markdown` here.\n",
+        "operationId": "getUserByName",
+        "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "description": "The name that needs to be fetched",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "with_email",
+            "in": "query",
+            "description": "Filter users without email",
+            "type": "boolean"
+          }
+        ],
+        "security": [
+          {
+            "oauth1": []
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/User"
+            },
+            "examples": {
+              "application/json": {
+                "username": "user1",
+                "email": "user@example.com"
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Updated user",
+        "description": "This can only be done by the logged in user.",
+        "operationId": "updateUser",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "description": "The name that needs to be updated",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Updated user object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "security": [
+          {
+            "oauth1": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Invalid user supplied"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      }
+    },
+    "/echo": {
+      "post": {
+        "tags": [
+          "Echo"
+        ],
+        "summary": "Echo test",
+        "description": "Receive the exact message you've sent",
+        "operationId": "echo",
+        "parameters": [
+          {
+            "name": "message",
+            "in": "body",
+            "description": "Echo payload",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Hello world!"
+            }
+          }
+        ],
+        "security": [
+          {
+            "oauth1": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "examples": {
+              "application/json": "Hello world!"
+            },
+            "schema": {
+              "type": "string"
+            },
+            "headers": {
+              "X-Rate-Limit": {
+                "type": "integer",
+                "format": "int32",
+                "description": "calls per hour allowed by the user"
+              },
+              "X-Expires-After": {
+                "type": "string",
+                "format": "date-time",
+                "description": "date in UTC when token expires"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Email": {
+      "description": "User email address",
+      "type": "string",
+      "format": "email",
+      "example": "john.smith@example.com"
+    },
+    "User": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "description": "User supplied username",
+          "type": "string",
+          "minLength": 4,
+          "example": "John78"
+        },
+        "firstName": {
+          "description": "User first name",
+          "type": "string",
+          "minLength": 1,
+          "example": "John"
+        },
+        "lastName": {
+          "description": "User last name",
+          "type": "string",
+          "minLength": 1,
+          "example": "Smith"
+        },
+        "email": {
+          "$ref": "#/definitions/Email"
+        }
+      }
+    }
+  }
+}
