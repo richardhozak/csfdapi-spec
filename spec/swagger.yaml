@@ -90,6 +90,7 @@ securityDefinitions:
     type: basic
     description: |
       ```
+      ENDPOINTS
       request token url:      https://android-api.csfd.cz/oauth/request-token
       access token url:       https://android-api.csfd.cz/oauth/access-token
       user authorization url: https://android-api.csfd.cz/oauth/authorize
@@ -175,6 +176,31 @@ paths:
       responses:
         '200':
           description: Success
+  
+  '/search/users':
+    get:
+      tags:
+        - Search
+      summary: Search for query
+      description: |
+        Searches given query for users only.
+      operationId: getSearchUsers
+      parameters:
+        - name: q
+          in: query
+          type: string
+          required: true
+          description: The user to search for
+        - name: limit
+          in: query
+          type: integer
+          required: false
+          description: Limit of search entries in response
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Success
 
   '/creator/{creator_id}':
     get:
@@ -203,6 +229,11 @@ paths:
       description: |
         Lists info about creator's films in which they are involved in or they created.
         For actors these movies are the ones they starred in, for director the ones they directed, etc.
+        
+        **NOTES**  
+        Does this api have _offset_ and _limit_ like the other creator endpoints?
+        There also seems to be parameter _return_ to specify what obejct to return, so far
+        only 'return=array' is used in mobile api, is this parameter optional? (seems to be)
       operationId: getCreatorFilms
       parameters:
         - name: creator_id
@@ -229,6 +260,16 @@ paths:
           description: 'The id of a creator'
           required: true
           type: integer
+        - name: offset
+          in: query
+          description: '**TODO**'
+          required: true
+          type: integer
+        - name: limit
+          in: query
+          description: '**TODO**'
+          required: true
+          type: integer
       responses:
         '200':
           description: Success
@@ -247,6 +288,247 @@ paths:
         - name: creator_id
           in: path
           description: 'The id of a creator'
+          required: true
+          type: integer
+        - name: offset
+          in: query
+          description: '**TODO**'
+          required: true
+          type: integer
+        - name: limit
+          in: query
+          description: '**TODO**'
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: Success
+          
+  '/film/{film_id}':
+    get:
+      tags:
+        - Film
+      summary: Get film
+      description: |
+        Gets partial info about movie under specific movie id, which can later be filled
+        by other endpoints in Film category.
+        
+        Details need to be confirmed  
+        **NOTES**  
+        Some film endpoints take _width_ as a parameter this probably corresponds to sizing of videos
+        or photos which have links to images with correct sizes or urls with correctly specified query
+        parameter of this size.
+      operationId: getFilm
+      parameters:
+        - name: film_id
+          in: path
+          description: 'film id'
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: Success
+        
+  '/film/{film_id}/photos':
+    get:
+      tags:
+        - Film
+      summary: Get film photos
+      description: |
+        Gets all photos related to film under specific movie id, this can be filled
+        into json structure previously received with getFilm
+        
+        Details need to be confirmed  
+        **NOTES**  
+        There also is parameter _size_ which seems to always be 'all', can it be anything else?
+        how is it relevant to api usage? do we need to expose it? can we use it in other film endpoints?
+      operationId: getFilmPhotos
+      parameters:
+        - name: film_id
+          in: path
+          description: 'film id'
+          required: true
+          type: integer
+        - name: offset
+          in: query
+          description: 'offset'
+          required: true
+          type: integer
+        - name: limit
+          in: query
+          description: 'limit'
+          required: true
+          type: integer
+        - name: width
+          in: query
+          description: 'width'
+          required: true
+          type: integer
+        - name: size
+          in: query
+          description: 'This always seem to be "all", can it be anything else?'
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Success
+          
+  '/film/{film_id}/videos':
+    get:
+      tags:
+        - Film
+      summary: Get film videos
+      description: |
+        Gets all videos related to film under specific movie id, this can be filled
+        into json structure previous received with getFilm
+        
+        Details need to be confirmed  
+        **NOTES**
+        Can we also use _size_ parameter here as it is with getFilmPhotos?
+      operationId: getFilmVideos
+      parameters:
+        - name: film_id
+          in: path
+          description: 'film id'
+          required: true
+          type: integer
+        - name: offset
+          in: query
+          description: 'offset'
+          required: true
+          type: integer
+        - name: limit
+          in: query
+          description: 'limit'
+          required: true
+          type: integer
+        - name: width
+          in: query
+          description: 'width'
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: Success
+          
+  '/film/{film_id}/comments':
+    get:
+      tags:
+        - Film
+      summary: Get film comments
+      description: |
+        Returns all comments for this movie from users which commented.
+        
+        Details need to be confirmed
+      operationId: getFilmComments
+      parameters:
+        - name: film_id
+          in: path
+          description: 'film id'
+          required: true
+          type: integer
+        - name: offset
+          in: query
+          description: 'offset'
+          required: true
+          type: integer
+        - name: limit
+          in: query
+          description: 'limit'
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: Success
+          
+  '/film/{film_id}/trivia':
+    get:
+      tags:
+        - Film
+      summary: Get film trivia
+      description: |
+        Returns all trivia associated with this movie.
+        
+        Details need to be confirmed  
+      operationId: getFilmTrivia
+      parameters:
+        - name: film_id
+          in: path
+          description: 'film id'
+          required: true
+          type: integer
+        - name: offset
+          in: query
+          description: 'offset'
+          required: true
+          type: integer
+        - name: limit
+          in: query
+          description: 'limit'
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: Success
+          
+  '/film/{film_id}/creators':
+    get:
+      tags:
+        - Film
+      summary: Get film creators
+      description: |
+        Returns list of creators associated with this movies such as directors, actors, screenwriters, ...
+        
+        Details need to be confirmed
+      operationId: getFilmCreators
+      parameters:
+        - name: film_id
+          in: path
+          description: 'film id'
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: Success
+          
+  '/film/{film_id}/my-rating':
+    get:
+      tags:
+        - Film
+      summary: Get users film rating
+      description: |
+        Returns rating of this movie of logged in user
+        
+        Details need to be confirmed
+        **NOTES**  
+        This endpoint surely needs user to be logged in and authorized (TODO confirm)
+      operationId: getMyFilmRating
+      parameters:
+        - name: film_id
+          in: path
+          description: 'film id'
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: Success
+          
+  '/film/{film_id}/my-comment':
+    get:
+      tags:
+        - Film
+      summary: Get users film comment
+      description: |
+        Returns comment of this movie of logged in user
+        
+        Details need to be confirmed
+        **NOTES**  
+        This endpoint surely needs user to be logged in and authorized (TODO confirm)
+      operationId: getMyFilmComment
+      parameters:
+        - name: film_id
+          in: path
+          description: 'film id'
           required: true
           type: integer
       responses:
